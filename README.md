@@ -7,6 +7,22 @@ protected health information (PHI) in a biotech clinical-trial packet, under **H
 **Design approach:** the LLM proposes *situations*, while typed knowledge and deterministic
 decision processes settle them, with a citation and evidence for every call.
 
+## Results
+
+(Raw results in the `out` folder.)
+
+* [Summary of 5 comparison runs using 4 language models](out/summary.md)
+
+### Local Models
+* OSS-GPT-20B
+  * [Run 1](https://htmlpreview.github.io/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-20b-1.html)
+  * [Run 2](https://htmlpreview.github.io/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-20b-2.html)
+* [OSS-GPT-120B](https://htmlpreview.github.io/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-120b.html)
+
+### Cloud Models
+* [gpt-5-nano](https://htmlpreview.github.io/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-5-nano.html)
+* [claude-sonnet-5-5](https://htmlpreview.github.io/?https://github.com/polycog/demo-phi/blob/main/out/report_sonnet-55.html)
+
 ## Run it
 
 You only need [uv](https://docs.astral.sh/uv/). The first `uv run` creates `.venv` and installs the
