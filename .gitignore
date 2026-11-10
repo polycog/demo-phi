@@ -1,0 +1,29 @@
+# Python bytecode and build output
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# virtual environments
+.venv/
+venv/
+env/
+
+# environment variables and secrets (e.g. OPENAI_API_KEY)
+.env
+.env.*
+
+# test and type-checker caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# editors and OS files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store

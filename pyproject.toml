@@ -1,0 +1,16 @@
+[project]
+name = "pii-demo"
+version = "0.1.0"
+description = "PHI review demo: polycog cognition vs. a single-prompt LLM baseline"
+requires-python = ">=3.13"
+dependencies = [
+    "polycog-cognition>=1.0.5",
+    "pydantic-ai-slim[openai]",
+]
+
+[project.optional-dependencies]
+# anthropic SDK 2.x turned BetaMessageParam into a Union, which pydantic-ai 2.56 still instantiates
+anthropic = ["pydantic-ai-slim[anthropic]", "anthropic>=1.12.1,<2"]
+
+[tool.uv]
+package = false  # run from the checkout: `uv run python -m pii_demo ...`

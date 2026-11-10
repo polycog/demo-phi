@@ -1,0 +1,61 @@
+{
+  "_about": "Expected HIPAA Safe Harbor treatment of the spans that matter. Any span not listed is expected to be KEPT, so redacting it counts as over-redaction. 'trap' names the reason a text-only approach tends to get the span wrong.",
+  "01_enrollment_log.txt": [
+    {"text": "Jamie Ortiz", "action": "KEEP", "trap": "staff-not-subject", "why": "A site coordinator is not the individual, a relative, an employer or a household member (A)."},
+    {"text": "2026-01-15", "action": "KEEP", "trap": "admin-date", "why": "A document version date is not about an individual (C)."},
+    {"text": "NX301-0007", "action": "KEEP", "trap": "reid-code", "why": "A random study code is an allowed re-identification code (§164.514(c))."},
+    {"text": "Eleanor Marsh", "action": "REDACT", "why": "Name of the individual (A)."},
+    {"text": "1934-08-22", "action": "REDACT", "trap": "age-90", "why": "Birth date of someone now 92: even the year is indicative of age over 89 (C)."},
+    {"text": "4471902", "action": "REDACT", "why": "Medical record number (H)."},
+    {"text": "207-555-0186", "action": "REDACT", "why": "Telephone number (D)."},
+    {"text": "2025-12-02", "action": "GENERALIZE", "replacement": "2025", "why": "Enrollment date relates to the individual; keep year only (C)."},
+    {"text": "NX301-0012", "action": "KEEP", "trap": "reid-code", "why": "Random study code (§164.514(c))."},
+    {"text": "Daniel Okafor", "action": "REDACT", "why": "Name of the individual (A)."},
+    {"text": "1958-02-11", "action": "GENERALIZE", "replacement": "1958", "why": "Birth date; year allowed since the subject is 68 (C)."},
+    {"text": "5520317", "action": "REDACT", "why": "Medical record number (H)."},
+    {"text": "dokafor58@example.net", "action": "REDACT", "why": "Email address (F)."},
+    {"text": "2026-01-09", "action": "GENERALIZE", "replacement": "2026", "why": "Enrollment date relates to the individual (C)."}
+  ],
+  "02_sae_narrative.txt": [
+    {"text": "2025-11-14", "action": "KEEP", "trap": "admin-date", "why": "Protocol approval date is not about an individual (C)."},
+    {"text": "NX301-0007", "action": "KEEP", "trap": "reid-code", "why": "Random study code (§164.514(c))."},
+    {"text": "91-year-old", "action": "GENERALIZE", "replacement": "90+", "trap": "age-90", "why": "Ages over 89 must be aggregated to 90 or older (C)."},
+    {"text": "Rangeley", "action": "REDACT", "why": "Town is a geographic subdivision smaller than a state (B)."},
+    {"text": "ME", "action": "KEEP", "why": "State is allowed (B)."},
+    {"text": "04970", "action": "GENERALIZE", "replacement": "049**", "trap": "zip3-data", "why": "ZIP3 049 covers more than 20,000 people, so the first 3 digits may stay (B)."},
+    {"text": "March 3, 2026", "action": "GENERALIZE", "replacement": "2026", "why": "Admission date (C)."},
+    {"text": "Ruth Marsh", "action": "REDACT", "trap": "relative", "why": "Name of a relative of the individual (A)."},
+    {"text": "Wilson's disease", "action": "KEEP", "trap": "eponym", "why": "An eponymous disease name is not a person's name."},
+    {"text": "ATP7B", "action": "KEEP", "why": "Gene symbol."},
+    {"text": "Priya Raman", "action": "KEEP", "trap": "staff-not-subject", "why": "The investigator is not the individual, a relative, an employer or a household member (A)."},
+    {"text": "EM-19340822", "action": "REDACT", "trap": "derived-code", "why": "Specimen label built from the subject's initials and birth date, which are only known from the enrollment log: not an allowed re-identification code (§164.514(c))."},
+    {"text": "NX301-0007-PK03", "action": "KEEP", "trap": "reid-code", "why": "Random study-coded sample ID (§164.514(c))."},
+    {"text": "2026-03-04", "action": "GENERALIZE", "replacement": "2026", "why": "Sample collection date relates to the individual (C)."},
+    {"text": "March 9, 2026", "action": "GENERALIZE", "replacement": "2026", "why": "Discharge date (C)."}
+  ],
+  "03_monitoring_note.txt": [
+    {"text": "2026-06-18", "action": "KEEP", "trap": "admin-date", "why": "The date of a site monitoring visit is about the site, not an individual (C)."},
+    {"text": "Tomas Lindqvist", "action": "KEEP", "trap": "staff-not-subject", "why": "The monitor is not the individual (A)."},
+    {"text": "NX301-0012", "action": "KEEP", "trap": "reid-code", "why": "Random study code (§164.514(c))."},
+    {"text": "1958", "action": "KEEP", "trap": "age-90", "why": "A birth year alone is allowed when it implies an age under 90 (C)."},
+    {"text": "03608", "action": "GENERALIZE", "replacement": "000**", "trap": "zip3-data", "why": "ZIP3 036 covers 20,000 people or fewer, so it must become 000 (B)."},
+    {"text": "603-555-0199", "action": "REDACT", "why": "Telephone number (D)."},
+    {"text": "Bath Iron Works", "action": "REDACT", "trap": "employer", "why": "Name of the individual's employer (A)."},
+    {"text": "NX301-0007", "action": "KEEP", "trap": "reid-code", "why": "Random study code (§164.514(c))."},
+    {"text": "Ruth", "action": "REDACT", "trap": "relative", "why": "Name of a relative (A)."},
+    {"text": "92", "action": "GENERALIZE", "replacement": "90+", "trap": "age-90", "why": "Ages over 89 must be aggregated (C)."},
+    {"text": "1998 Boston Marathon finish at age 64", "action": "ESCALATE", "trap": "unique-characteristic", "why": "A publicized personal event that also reveals a 1934 birth year: a unique identifying characteristic (R) that needs human review."},
+    {"text": "HeLa", "action": "KEEP", "trap": "eponym", "why": "A cell line name, not a person's name."},
+    {"text": "HL-2291", "action": "KEEP", "why": "Reagent lot number, not about an individual."},
+    {"text": "2027-06", "action": "KEEP", "trap": "admin-date", "why": "Reagent expiry date."}
+  ],
+  "04_sample_manifest.txt": [
+    {"text": "2026-03-05", "action": "KEEP", "trap": "admin-date", "why": "Shipment date is about the shipment, not an individual (C)."},
+    {"text": "NX301-0007-PK03", "action": "KEEP", "trap": "reid-code", "why": "Random study-coded sample ID (§164.514(c))."},
+    {"text": "2026-03-04", "action": "GENERALIZE", "replacement": "2026", "why": "Sample collection date (C)."},
+    {"text": "4471902-LFT1", "action": "REDACT", "trap": "derived-code", "why": "Sample ID built from the subject's medical record number, which is only known from the enrollment log (H, §164.514(c))."},
+    {"text": "2026-03-03", "action": "GENERALIZE", "replacement": "2026", "why": "Sample collection date (C)."},
+    {"text": "NX301-0012-PK01", "action": "KEEP", "trap": "reid-code", "why": "Random study-coded sample ID (§164.514(c))."},
+    {"text": "2026-01-20", "action": "GENERALIZE", "replacement": "2026", "why": "Sample collection date (C)."}
+  ]
+}
