@@ -1,138 +1,117 @@
-# PHI review demo: `cognition` vs. LLM
+# PHI Reviewer
 
-A design-partner demo of [polycog `cognition`](https://cognition.polycog.ai) applied to finding
-protected health information (PHI) in a biotech clinical-trial packet, under **HIPAA Safe Harbor**
-(45 CFR §164.514(b)(2)).
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
+[![cognition](https://img.shields.io/badge/cognition-inside-7b2fbe?labelColor=f3effa&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjIgMCAzNiAzNiIgZmlsbD0ibm9uZSI+PHBvbHlnb24gcG9pbnRzPSIyMCw0IDM0LjMsMTQuNCAyOC44LDMxLjYgMTEuMiwzMS42IDUuNywxNC40IiBzdHJva2U9IiM3YjJmYmUiIHN0cm9rZS13aWR0aD0iMi4yIi8+PGcgc3Ryb2tlPSIjYzQ3ZDIwIiBzdHJva2Utd2lkdGg9IjIiPjxsaW5lIHgxPSIyMCIgeTE9IjIwIiB4Mj0iMjAiIHkyPSI0Ii8+PGxpbmUgeDE9IjIwIiB5MT0iMjAiIHgyPSIzNC4zIiB5Mj0iMTQuNCIvPjxsaW5lIHgxPSIyMCIgeTE9IjIwIiB4Mj0iMjguOCIgeTI9IjMxLjYiLz48bGluZSB4MT0iMjAiIHkxPSIyMCIgeDI9IjExLjIiIHkyPSIzMS42Ii8+PGxpbmUgeDE9IjIwIiB5MT0iMjAiIHgyPSI1LjciIHkyPSIxNC40Ii8+PC9nPjxnIGZpbGw9IiM3YjJmYmUiPjxjaXJjbGUgY3g9IjIwIiBjeT0iNCIgcj0iMy4yIi8+PGNpcmNsZSBjeD0iMzQuMyIgY3k9IjE0LjQiIHI9IjMuMiIvPjxjaXJjbGUgY3g9IjI4LjgiIGN5PSIzMS42IiByPSIzLjIiLz48Y2lyY2xlIGN4PSIxMS4yIiBjeT0iMzEuNiIgcj0iMy4yIi8+PGNpcmNsZSBjeD0iNS43IiBjeT0iMTQuNCIgcj0iMy4yIi8+PC9nPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjQuNiIgZmlsbD0iI2M0N2QyMCIvPjwvc3ZnPgo=)](https://github.com/polycog/cognition)
+[![cognition on PyPI](https://img.shields.io/pypi/v/polycog-cognition?label=cognition%20on%20PyPI&color=c47d20&labelColor=f3effa&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjIgMCAzNiAzNiIgZmlsbD0ibm9uZSI+PHBvbHlnb24gcG9pbnRzPSIyMCw0IDM0LjMsMTQuNCAyOC44LDMxLjYgMTEuMiwzMS42IDUuNywxNC40IiBzdHJva2U9IiM3YjJmYmUiIHN0cm9rZS13aWR0aD0iMi4yIi8+PGcgc3Ryb2tlPSIjYzQ3ZDIwIiBzdHJva2Utd2lkdGg9IjIiPjxsaW5lIHgxPSIyMCIgeTE9IjIwIiB4Mj0iMjAiIHkyPSI0Ii8+PGxpbmUgeDE9IjIwIiB5MT0iMjAiIHgyPSIzNC4zIiB5Mj0iMTQuNCIvPjxsaW5lIHgxPSIyMCIgeTE9IjIwIiB4Mj0iMjguOCIgeTI9IjMxLjYiLz48bGluZSB4MT0iMjAiIHkxPSIyMCIgeDI9IjExLjIiIHkyPSIzMS42Ii8+PGxpbmUgeDE9IjIwIiB5MT0iMjAiIHgyPSI1LjciIHkyPSIxNC40Ii8+PC9nPjxnIGZpbGw9IiM3YjJmYmUiPjxjaXJjbGUgY3g9IjIwIiBjeT0iNCIgcj0iMy4yIi8+PGNpcmNsZSBjeD0iMzQuMyIgY3k9IjE0LjQiIHI9IjMuMiIvPjxjaXJjbGUgY3g9IjI4LjgiIGN5PSIzMS42IiByPSIzLjIiLz48Y2lyY2xlIGN4PSIxMS4yIiBjeT0iMzEuNiIgcj0iMy4yIi8+PGNpcmNsZSBjeD0iNS43IiBjeT0iMTQuNCIgcj0iMy4yIi8+PC9nPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjQuNiIgZmlsbD0iI2M0N2QyMCIvPjwvc3ZnPgo=)](https://pypi.org/project/polycog-cognition/)
 
-**Design approach:** the LLM proposes *situations*, while typed knowledge and deterministic
-decision processes settle them, with a citation and evidence for every call.
+## 1. Summary
 
-## Results
+A **neurosymbolic** PHI reviewer built with the [`cognition`](https://github.com/polycog/cognition) library. It reads a packet of clinical-trial documents, finds the protected health information (PHI) that HIPAA Safe Harbor (45 CFR §164.514(b)(2)) requires removing, and decides for each span whether to redact, generalize, keep, or escalate it to a human, citing the regulation and the evidence for every call. A single-prompt LLM baseline, given the same model and the same rulebook, runs alongside it for comparison.
 
-(Raw results in the `out` folder.)
+### Contents
 
-* [Summary of 5 comparison runs using 4 language models](out/summary.md)
+1. [Summary](#1-summary)
+2. [Problem Statement](#2-problem-statement)
+3. [Technical Approach and Results](#3-technical-approach-and-results)
+4. [Install and Run](#4-install-and-run)
+5. [License and Disclaimers](#5-license-and-disclaimers)
 
-### Local Models
-* OSS-GPT-20B
-  * [Run 1](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-20b-1.html)
-  * [Run 2](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-20b-2.html)
-* [OSS-GPT-120B](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-120b.html)
+---
 
-### Cloud Models
-* [gpt-5-nano](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-5-nano.html)
-* [claude-sonnet-5-5](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_sonnet-55.html)
+## 2. Problem Statement
 
-## Run it
+Before a biotech sponsor shares clinical-trial documents with labs, partners or regulators, staff must remove the PHI by hand: a slow process that varies from reviewer to reviewer. Safe Harbor turns on context and cross-references that pattern tools miss: staff names may stay but a patient's daughter's may not, a ZIP code's first three digits may stay only if the area is populous enough, and a sample ID can be built from a medical record number listed in another document. LLMs can read that context, but they can't be trusted to apply tables and arithmetic exactly, to connect facts across documents, or to explain their calls. A **neurosymbolic** approach combines both: the LLM reads the text, and symbolic reasoning applies the regulation, so every decision cites its rule and its evidence, and what no rule can settle goes to a human.
 
-You only need [uv](https://docs.astral.sh/uv/). The first `uv run` creates `.venv` and installs the
-dependencies from `pyproject.toml` / `uv.lock` (Python 3.13+).
+See [the full problem statement and opportunity](docs/usecase.md).
+
+---
+
+## 3. Technical Approach and Results
+
+Like a careful privacy officer, the reviewer first establishes what each mention is, then applies the rule. An LLM only proposes candidate spans and answers narrow, typed questions about each one (*whose name is this? what is this the date of?*), several times, so that agreement among its answers is a confidence. A **[symbolic decision process](https://docs.polycog.ai/ideas/kadp.html)** built with `cognition` decides everything else: which questions to ask, a **[world graph](https://docs.polycog.ai/ideas/knowledge.html)** profile of each participant built from every document, and 21 Safe Harbor rules written as WHEN/THEN operators, with a swappable policy that picks among the rules that apply. With no LLM in these decisions, the same answers always lead to the same decision, and every step can be traced. See [the technical approach](docs/approach.md) for details.
+
+**Results:** across five runs on four models, `cognition` scored 48–50/50 on every model, while the single-prompt baseline scored 20–47/50. Even the smallest local model with `cognition` beat the strongest model on its own. See [the summary of all runs](out/summary.md), or open a run's report:
+
+| Model | Where it ran | Report |
+|---|---|---|
+| gpt-oss-20b | local (LM Studio) | [run 1](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-20b-1.html) · [run 2](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-20b-2.html) |
+| gpt-oss-120b | local (LM Studio) | [report](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-oss-120b.html) |
+| gpt-5-nano | cloud (Azure OpenAI) | [report](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_gpt-5-nano.html) |
+| Claude Sonnet 5.5 | cloud (Anthropic) | [report](https://html.polycog.ai/?https://github.com/polycog/demo-phi/blob/main/out/report_sonnet-55.html) |
+
+---
+
+## 4. Install and Run
+
+### 4.1 Clone the repository
+
+```bash
+git clone https://github.com/polycog/demo-phi.git
+cd demo-phi
+```
+
+### 4.2 Install the dependencies
+
+`cognition` requires **Python 3.13 or later**. The project is managed with [uv](https://docs.astral.sh/uv/): the first `uv run` creates `.venv` and installs everything in [`pyproject.toml`](pyproject.toml) and `uv.lock`. To install up front:
+
+```bash
+uv sync
+```
+
+This installs:
+
+- **`polycog-cognition`**, the `cognition` library, published on PyPI under that name;
+- **`pydantic-ai-slim[openai]`**, which `cognition` builds on, with the OpenAI extra for the language model.
+
+For Anthropic models, add the `anthropic` extra to every command, e.g. `uv run --extra anthropic python -m pii_demo run ...`. A plain `uv run` removes extras again.
+
+### 4.3 Choose a language model
+
+The model is chosen with arguments or environment variables (see [`pii_demo/llm.py`](pii_demo/llm.py)):
+
+| Setting | Default | Examples |
+|---|---|---|
+| `--model` / `PII_MODEL` | `openai/gpt-oss-20b` | `gpt-5-mini`, or any Pydantic AI model string with `--base-url ""`, such as `anthropic:claude-sonnet-5-5` |
+| `--base-url` / `PII_BASE_URL` | `http://localhost:1234/v1` (LM Studio) | `""` for the provider's own endpoint |
+| `PII_API_KEY` | `local` | falls back to `OPENAI_API_KEY` |
+
+Export any API key in the shell you run the demo from, and keep it out of the repository. Check that the model is reachable:
 
 ```bash
 uv run python -m pii_demo check
 ```
 
-```bash
-uv run python -m pii_demo run
-```
+### 4.4 Run the review
 
 ```bash
+uv run python -m pii_demo run         # add -v to log cognition's decisions
 open out/report.html
 ```
 
-For Anthropic models, add the extra to every command, e.g. `uv run --extra anthropic python -m pii_demo run ...`.
-A plain `uv run` removes extras again.
+`run` reviews the four documents in [`corpus/`](corpus), runs the baseline on the same model, scores both against `corpus/gold.json`, and writes `out/results.json` and `out/report.html`. Other options:
 
-The model is chosen with arguments or environment variables (see `pii_demo/llm.py`):
-
-| | default | examples |
+| Option | Default | What it does |
 |---|---|---|
-| `--model` / `PII_MODEL` | `openai/gpt-oss-20b` | `gpt-5-mini`, or any Pydantic AI string with `--base-url ""`: `anthropic:claude-sonnet-5-5` |
-| `--base-url` / `PII_BASE_URL` | `http://localhost:1234/v1` (LM Studio) | `""` = the provider's own endpoint |
-| `PII_API_KEY` | `local` | falls back to `OPENAI_API_KEY` |
+| `--trials` | `3` | LLM votes per question; their agreement is the confidence |
+| `--min-confidence` | `0.6` | Below this agreement, a span is escalated instead of decided |
+| `--policy` | `safe-harbor` | `safe-harbor` (most specific rule wins) or `conservative` (most protective rule wins) |
+| `--no-baseline` | off | Skip the single-prompt baseline |
 
-Other options: `--trials 3` (LLM votes per question; their agreement is the confidence),
-`--min-confidence 0.6`, `--policy safe-harbor|conservative`, `--no-baseline`, `-v` (cognition logs).
+### 4.5 Change the policy without calling the LLM again
 
-Change the policy **without calling the LLM again**: only the rules stage reruns.
+Only the rules stage reruns, so this takes a fraction of a second:
 
 ```bash
 uv run python -m pii_demo redecide --policy conservative --save-as out/conservative
 ```
 
-## The packet (`corpus/`)
+To re-score and re-render an existing `results.json`, run `uv run python -m pii_demo report`.
 
-Four short synthetic documents from a fictional Phase 2 study, NX-301: an enrollment log, a
-serious-adverse-event narrative, a monitoring visit note and a central-lab sample manifest.
-`corpus/gold.json` holds the expected treatment of 50 spans, each with the reason and the
-"trap" it tests.
+---
 
-## The traps: where reading the text is not enough
+## 5. License and Disclaimers
 
-| Situation | Why a single prompt struggles | What `cognition` does |
-|---|---|---|
-| `03608` vs `04970` | Whether a ZIP keeps its first 3 digits depends on a **population table** | `RestrictedZip`/`Zip3` rules consult the HHS list (`reference.py`) |
-| `EM-19340822`, `4471902-LFT1` | These look like ordinary sample IDs. They are built from a birth date and an MRN that appear **only in another document** | `LINK` builds subject profiles in a `WorldGraph`; `DerivedCode` checks every code against them, and cites where each fact came from |
-| `1934-08-22`, `91-year-old`, `92` | Over 89 even the **year** must go: that takes arithmetic against a reference year | `BirthDateOver89`, `AgeOver89` |
-| `Dr. Priya Raman`, `Jamie Ortiz` | Safe Harbor covers the individual, relatives, employers and household, **not staff**. LLMs tend to redact every name | The general `AnyPersonName` rule and its exception `StaffOutOfScope` are both proposed; a **policy evaluator** picks one |
-| `NX301-0007` | Random study codes are *permitted* re-identification codes (§164.514(c)) | `StudyCode` keeps them, but only if `DerivedCode` found nothing |
-| `2026-06-18` (monitoring visit), `2026-03-05` (shipment) | Dates about the site or shipment are not about an individual; dates of admission or collection are | The LLM answers one narrow question, *what is this the date of?*, and a rule applies the regulation |
-| `Wilson's disease`, `HeLa` | Names that are not people | `NotAPerson`, `BiomedicalTerm` |
-| `1998 Boston Marathon finish at age 64` | Not on the list of 18, yet it identifies her and implies a 1934 birth year | `UniqueCharacteristic` **escalates** to a human, with the computed age as evidence |
+This project is released under the [Apache License 2.0](LICENSE). Copyright © 2026 Polycog, Inc. If you use it, please cite it using the metadata in [`CITATION.cff`](CITATION.cff).
 
-## How it maps onto the library
-
-```
-Cogent "phi-reviewer"         sensor: packet (reads corpus/)   actuators: say, publish
-└─ root DecisionProcess       one visible step per cycle (pipeline.py)
-   EXTRACT      ModelPopulator(Extraction)            ← LLM proposes typed spans; regexes add cheap ones
-   INVESTIGATE  sub-DP assess/investigate.py          ← decides WHICH questions to ask about each span
-                  Ask(question) ── EnumClassifier     ← LLM answers typed questions, N votes = confidence
-                  Settle(question)                    ← pattern answers; evaluator prefers it (no LLM cost)
-   LINK         WorldGraph: Mention, Subject, Document, InDocument, Concerns
-   DECIDE       sub-DP assess/rules.py                ← no LLM: 24 Safe Harbor rules as operators
-                  guards: LowConfidence, UniqueCharacteristic → ESCALATE
-                  policy evaluator: "most specific rule" (safe-harbor) | "most protective rule" (conservative)
-   PUBLISH      actuator → results.json → report.html
-```
-
-Design choices worth pointing out to a design partner:
-
-- **The LLM never decides.** It fills typed schemas and answers enum questions. A low-agreement
-  answer is not acted on: it becomes an `ESCALATE` with the reason attached.
-- **Investigate before deciding.** Every fact from every document is in the graph before any rule
-  runs. That is what catches codes derived from identifiers in other documents.
-- **Rules say what is allowed; policies say what is preferred.** Both general rules and their exceptions are
-  proposed, and swapping one evaluator turns Safe Harbor into a stricter in-house policy. See
-  `POLICIES` in `assess/rules.py`.
-- **Every decision is explainable.** The rule, its CFR citation, the evidence (including which
-  document a fact came from) and every rule that competed for the span are all in the report's
-  decision trace.
-- **Fair baseline.** The baseline (`baseline.py`) uses the same model *and the same rulebook*,
-  including the restricted ZIP3 list, in one prompt per document. The comparison isolates
-  process from knowledge.
-
-## Layout
-
-```
-pii_demo/
-  __main__.py        CLI: check | run | redecide | report
-  llm.py             model selection (any Pydantic AI model)
-  domain.py          typed vocabulary (DocEnums the LLM answers in), graph entities, Decision
-  reference.py       restricted ZIP3 list, CFR citations, patterns
-  extract.py         System 1 proposals: ModelPopulator + regex sensors, span resolution
-  assess/investigate.py   sub-DP: which questions, asked how
-  assess/rules.py         sub-DP: Safe Harbor rules + policy evaluators
-  pipeline.py        root DP + Cogent
-  baseline.py        single-prompt LLM baseline
-  score.py, report.py
-corpus/              synthetic packet + gold.json
-```
-
-## Caveats
-
-- This is a demo, not a compliance tool. The synthetic packet and gold labels encode one reasonable
-  reading of Safe Harbor.
-- The restricted ZIP3 list comes from HHS guidance based on the 2000 Census.
-- Subject attribution is "the nearest preceding subject code", which is fine for this packet. A
-  real system would ask the LLM, or use document structure.
+> **Disclaimer:** this project is a technical demonstration of neurosymbolic reasoning. It is not a compliance tool and is not legal advice. The documents in `corpus/` and the people in them are fictional, and the gold labels encode one reasonable reading of Safe Harbor. The restricted ZIP3 list comes from HHS guidance based on the 2000 Census. Participant attribution uses "the nearest preceding subject code", which suits this packet; a real system would ask the LLM or use the document's structure.
