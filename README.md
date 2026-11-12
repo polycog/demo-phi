@@ -7,7 +7,7 @@
 
 ## 1. Summary
 
-A **neurosymbolic** PHI reviewer built with the [`cognition`](https://github.com/polycog/cognition) library. It reads a packet of clinical-trial documents, finds the protected health information (PHI) that HIPAA Safe Harbor (45 CFR §164.514(b)(2)) requires removing, and decides for each span whether to redact, generalize, keep, or escalate it to a human, citing the regulation and the evidence for every call. A single-prompt LLM baseline, given the same model and the same rulebook, runs alongside it for comparison.
+A **neurosymbolic** reviewer for redacting personal information, built with the [`cognition`](https://github.com/polycog/cognition) library and demonstrated on protected health information in clinical trials. It reads a packet of clinical-trial documents, finds the protected health information (PHI) that HIPAA Safe Harbor (45 CFR §164.514(b)(2)) requires removing, and decides for each span whether to redact, generalize, keep, or escalate it to a human, citing the regulation and the evidence for every call. A single-prompt LLM baseline, given the same model and the same rulebook, runs alongside it for comparison.
 
 ### Contents
 
@@ -21,7 +21,7 @@ A **neurosymbolic** PHI reviewer built with the [`cognition`](https://github.com
 
 ## 2. Problem Statement
 
-Before a biotech sponsor shares clinical-trial documents with labs, partners or regulators, staff must remove the PHI by hand: a slow process that varies from reviewer to reviewer. Safe Harbor turns on context and cross-references that pattern tools miss: staff names may stay but a patient's daughter's may not, a ZIP code's first three digits may stay only if the area is populous enough, and a sample ID can be built from a medical record number listed in another document. LLMs can read that context, but they can't be trusted to apply tables and arithmetic exactly, to connect facts across documents, or to explain their calls. A **neurosymbolic** approach combines both: the LLM reads the text, and symbolic reasoning applies the regulation, so every decision cites its rule and its evidence, and what no rule can settle goes to a human.
+Organizations routinely share their data with vendors, partners, auditors and regulators, and before they do, the personally identifiable information (PII) in it must be removed or transformed under rules such as HIPAA, GDPR or the CCPA. Today that means manual review, helped by pattern tools that find phone numbers but not the context the rules turn on: whose name it is, whether a date is about a person, or whether a code was built from an identifier in another document. This demo takes one demanding instance, protected health information (PHI) in clinical-trial documents under HIPAA Safe Harbor. Staff names may stay but a patient's daughter's may not, a ZIP code's first three digits may stay only if the area is populous enough, and a sample ID can be built from a medical record number listed in another document. LLMs can read that context, but they can't be trusted to apply tables and arithmetic exactly, to connect facts across documents, or to explain their calls. Both kinds of error are costly: a missed identifier is a breach, and over-redaction destroys the data's value. 
 
 See [the full problem statement and opportunity](docs/usecase.md).
 
