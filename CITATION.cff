@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "PHI Reviewer"
+abstract: >-
+  A neurosymbolic PHI reviewer built with the cognition library. It reads a packet of clinical-trial
+  documents, finds the protected health information that HIPAA Safe Harbor (45 CFR §164.514(b)(2))
+  requires removing, and decides for each span whether to redact, generalize, keep, or escalate it to
+  a human, citing the regulation and the evidence for every call.
+authors:
+  - given-names: Shiwali
+    family-names: Mohan
+    affiliation: "Polycog, Inc."
+  - given-names: Nate
+    family-names: Derbinsky
+    affiliation: "Polycog, Inc."
+  - name: "Polycog, Inc."
+version: 0.1.0
+date-released: 2026-11-12
+license: Apache-2.0
+repository-code: "https://github.com/polycog/demo-phi"
+keywords:
+  - neurosymbolic
+  - de-identification
+  - protected health information
+  - HIPAA Safe Harbor
+  - clinical trials
+  - polycog cognition
